@@ -20,8 +20,8 @@ public class FunTranslationRepositoryTest {
 
         ShakespeareTranslation shakespeareTranslation = funTranslationRepository.getShakespeareTranslationBy("It is a beautiful day");
         assertNotNull(shakespeareTranslation);
-        assertEquals(1, shakespeareTranslation.getShakespeareSuccess().getTotal());
-        assertNotNull(shakespeareTranslation.getShakespeareTranslationContent().getTranslated());
+        assertEquals(1, shakespeareTranslation.getSuccess().getTotal());
+        assertNotNull(shakespeareTranslation.getContents().getTranslated());
     }
-
 }
+

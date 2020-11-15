@@ -17,7 +17,7 @@ public class TranslationClient {
     public ShakespeareTranslation getShakespeareTranslation(String input) {
         ShakespeareTranslation shakespeareTranslation = funTranslationRepository.getShakespeareTranslationBy(input);
 
-       return Optional.ofNullable(shakespeareTranslation).filter(st -> st.getShakespeareSuccess().getTotal() > 0)
+       return Optional.ofNullable(shakespeareTranslation).filter(st -> st.getSuccess().getTotal() > 0)
                .orElseThrow(() -> new DataNotFoundException("Unable to translate input " + input));
     }
 }

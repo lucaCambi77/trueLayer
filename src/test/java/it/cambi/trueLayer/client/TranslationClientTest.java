@@ -33,18 +33,18 @@ public class TranslationClientTest {
         String translatedInput = "input";
 
         when(translationRepository.getShakespeareTranslationBy(input)).thenReturn(ShakespeareTranslation.builder()
-                .shakespeareSuccess(ShakespeareSuccess.builder()
+                .success(ShakespeareSuccess.builder()
                         .total(1).build())
-                .shakespeareTranslationContent(ShakespeareTranslationContent.builder()
+                .contents(ShakespeareTranslationContent.builder()
                         .translation("shakespeare")
                         .translated(translatedInput)
                         .text(input).build()).build());
 
         ShakespeareTranslation shakespeareTranslation = translationClient.getShakespeareTranslation(input);
 
-        assertEquals(input, shakespeareTranslation.getShakespeareTranslationContent().getText());
-        assertEquals(translatedInput, shakespeareTranslation.getShakespeareTranslationContent().getTranslated());
-        assertEquals(1, shakespeareTranslation.getShakespeareSuccess().getTotal());
+        assertEquals(input, shakespeareTranslation.getContents().getText());
+        assertEquals(translatedInput, shakespeareTranslation.getContents().getTranslated());
+        assertEquals(1, shakespeareTranslation.getSuccess().getTotal());
         verify(translationRepository).getShakespeareTranslationBy(input);
     }
 
@@ -66,7 +66,7 @@ public class TranslationClientTest {
         String input = "input";
 
         when(translationRepository.getShakespeareTranslationBy(input)).thenReturn(ShakespeareTranslation.builder()
-                .shakespeareSuccess(ShakespeareSuccess.builder().total(0)
+                .success(ShakespeareSuccess.builder().total(0)
                         .build()).build());
 
         assertThrows(DataNotFoundException.class
