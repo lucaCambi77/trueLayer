@@ -15,7 +15,7 @@ public class TrueLayerService {
     private final PokemonClient pokemonClient;
     private final TranslationClient translationClient;
 
-    public ShakespeareTranslationDto findShakespeareTranslationByPokemon(String name, Integer version) {
+    public ShakespeareTranslationDto getShakespeareTranslationByPokemon(String name, Integer version) {
         return Optional.ofNullable(name).filter(n -> !n.isBlank())
                 .map(n -> pokemonClient.getPokemonFlavorText(name, version))
                 .map(f -> translationClient.getShakespeareTranslation(f.getFlavour_text()))
