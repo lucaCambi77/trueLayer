@@ -33,13 +33,13 @@ public class TrueLayerServiceTest {
     @Mock
     private TranslationClient translationClient;
 
+    private final String name = "pokemon";
+    private final String flavourText = "flavourText";
+
     @Test
     public void shouldFindShakespeareTranslation() {
-        String name = "pokemon";
-        String flavourText = "flavourText";
-        String flavourTranslated = "flavour_translated";
 
-        FlavourText flavourTextResponse =  FlavourText.builder()
+        FlavourText flavourTextResponse = FlavourText.builder()
                 .flavour_text(flavourText)
                 .language(FlavourTextVersion.builder()
                         .name(TrueLayerConstant.DEFAULT_LANGUAGE)
@@ -50,6 +50,7 @@ public class TrueLayerServiceTest {
 
         when(pokemonClient.getPokemonFlavorText(name, null)).thenReturn(flavourTextResponse);
 
+        String flavourTranslated = "flavour_translated";
         when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavour_text())).thenReturn(ShakespeareTranslation.builder()
                 .success(ShakespeareSuccess.builder()
                         .total(1).build())
@@ -70,7 +71,7 @@ public class TrueLayerServiceTest {
 
     @Test
     public void shouldThrowWhenDataNotFound() {
-        String name = "pokemon";
+
         when(pokemonClient.getPokemonFlavorText(name, null)).thenThrow(new DataNotFoundException("Data not Found"));
 
         assertThrows(DataNotFoundException.class
@@ -79,12 +80,11 @@ public class TrueLayerServiceTest {
 
         verify(pokemonClient).getPokemonFlavorText(name, null);
         verify(translationClient, times(0)).getShakespeareTranslation(anyString());
-
     }
 
     @Test
     public void shouldThrowWhenPokemonClientRestClientException() {
-        String name = "pokemon";
+
         when(pokemonClient.getPokemonFlavorText(name, null)).thenThrow(new TrueLayerRestClientException(new RestClientException("Rest client error")));
 
         assertThrows(TrueLayerRestClientException.class
@@ -95,25 +95,23 @@ public class TrueLayerServiceTest {
         verify(translationClient, times(0)).getShakespeareTranslation(anyString());
     }
 
-   @Test
+    @Test
     public void shouldThrowWhenTranslationClientRestClientException() {
-       String name = "pokemon";
-       String flavourText = "flavourText";
 
-       FlavourText flavourTextResponse =  FlavourText.builder()
-               .flavour_text(flavourText)
-               .language(FlavourTextVersion.builder()
-                       .name(TrueLayerConstant.DEFAULT_LANGUAGE)
-                       .url("languageUrl").build())
-               .version(FlavourTextVersion.builder()
-                       .name("versionName").url("versionUrl/" + 100)
-                       .build()).build();
+        FlavourText flavourTextResponse = FlavourText.builder()
+                .flavour_text(flavourText)
+                .language(FlavourTextVersion.builder()
+                        .name(TrueLayerConstant.DEFAULT_LANGUAGE)
+                        .url("languageUrl").build())
+                .version(FlavourTextVersion.builder()
+                        .name("versionName").url("versionUrl/" + 100)
+                        .build()).build();
 
-       when(pokemonClient.getPokemonFlavorText(name, null)).thenReturn(flavourTextResponse);
+        when(pokemonClient.getPokemonFlavorText(name, null)).thenReturn(flavourTextResponse);
 
-       when(translationClient.getShakespeareTranslation(flavourText)).thenThrow(new TrueLayerRestClientException(new RestClientException("Rest client error")));
+        when(translationClient.getShakespeareTranslation(flavourText)).thenThrow(new TrueLayerRestClientException(new RestClientException("Rest client error")));
 
-       assertThrows(TrueLayerRestClientException.class
+        assertThrows(TrueLayerRestClientException.class
                 , () -> trueLayerService.getShakespeareTranslationByPokemon(name, null)
                 , "Should throw when TrueLayerRestClientException");
 
@@ -123,7 +121,6 @@ public class TrueLayerServiceTest {
 
     @Test
     public void shouldThrowWhenInputIsNull() {
-        String name = "pokemon";
 
         assertThrows(IllegalArgumentException.class
                 , () -> trueLayerService.getShakespeareTranslationByPokemon(null, null)
@@ -135,7 +132,6 @@ public class TrueLayerServiceTest {
 
     @Test
     public void shouldThrowWhenInputIsBlank() {
-        String name = "pokemon";
 
         assertThrows(IllegalArgumentException.class
                 , () -> trueLayerService.getShakespeareTranslationByPokemon("    ", null)

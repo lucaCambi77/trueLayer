@@ -27,11 +27,12 @@ public class TranslationClientTest {
     @Mock
     private FunTranslationRepository translationRepository;
 
+    private final String input = "input";
+
     @Test
     public void shouldTranslateShakespeareFromInput() {
-        String input = "input";
-        String translatedInput = "input";
 
+        String translatedInput = "input";
         when(translationRepository.getShakespeareTranslationBy(input)).thenReturn(ShakespeareTranslation.builder()
                 .success(ShakespeareSuccess.builder()
                         .total(1).build())
@@ -50,7 +51,6 @@ public class TranslationClientTest {
 
     @Test
     public void shouldThrowWhenNoTranslationFound() {
-        String input = "input";
 
         when(translationRepository.getShakespeareTranslationBy(input)).thenReturn(null);
 
@@ -63,7 +63,6 @@ public class TranslationClientTest {
 
     @Test
     public void shouldThrowWhenTranslationNotSucceeded() {
-        String input = "input";
 
         when(translationRepository.getShakespeareTranslationBy(input)).thenReturn(ShakespeareTranslation.builder()
                 .success(ShakespeareSuccess.builder().total(0)
@@ -79,7 +78,7 @@ public class TranslationClientTest {
 
     @Test
     public void shouldThrowWhenRestClientException() {
-        String input = "input";
+
         when(translationRepository.getShakespeareTranslationBy(input)).thenThrow(new TrueLayerRestClientException(new RestClientException("RestClientException")));
 
         assertThrows(TrueLayerRestClientException.class

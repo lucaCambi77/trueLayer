@@ -31,7 +31,9 @@ class PokemonClientTest {
     @Mock
     private PokemonRepository pokemonRepository;
 
-    private static Integer pokemonVerCount = 100;
+    private final Integer pokemonVerCount = 100;
+    private final String flavourText = "flavour_text";
+    private final String pokemon = "pokemon";
 
     @BeforeEach
     public void setUp() {
@@ -40,8 +42,7 @@ class PokemonClientTest {
 
     @Test
     public void shouldGetPokemonFlavourTextWithDefaults() {
-        String flavourText = "flavour_text";
-        String pokemon = "pokemon";
+
         when(pokemonRepository.getPokemonByName(pokemon))
                 .thenReturn(Pokemon.builder().id(1).name("pokemon")
                         .flavor_text_entries(Collections.singletonList(FlavourText.builder()
@@ -65,8 +66,7 @@ class PokemonClientTest {
     @Test
     public void shouldGetPokemonFlavourTextWithDifferentVersion() {
         Integer differentVersion = 10;
-        String flavourText = "flavour_text";
-        String pokemon = "pokemon";
+
         when(pokemonRepository.getPokemonByName(pokemon))
                 .thenReturn(Pokemon.builder().id(1).name("pokemon")
                         .flavor_text_entries(Collections.singletonList(FlavourText.builder()
@@ -91,7 +91,6 @@ class PokemonClientTest {
     @Test
     public void shouldThrowNegativeVersion() {
         Integer negativeVersion = -1;
-        String pokemon = "pokemon";
 
         assertThrows(IllegalArgumentException.class
                 , () -> pokemonClient.getPokemonFlavorText(pokemon, negativeVersion)
@@ -103,7 +102,6 @@ class PokemonClientTest {
 
     @Test
     public void shouldThrowNotYesExistingVersion() {
-        String pokemon = "pokemon";
 
         Integer notYetExistingVersion = pokemonVerCount + 1;
 
@@ -117,7 +115,7 @@ class PokemonClientTest {
 
     @Test
     public void shouldThrowWhenGetPokemonMissingFlavourTextEntries() {
-        String pokemon = "pokemon";
+
         when(pokemonRepository.getPokemonByName(pokemon))
                 .thenReturn(Pokemon.builder().id(1).name("pokemon")
                         .build());
@@ -132,7 +130,7 @@ class PokemonClientTest {
 
     @Test
     public void shouldThrowWhenGetNullPokemon() {
-        String pokemon = "pokemon";
+
         when(pokemonRepository.getPokemonByName(pokemon))
                 .thenReturn(null);
 
@@ -146,7 +144,7 @@ class PokemonClientTest {
 
     @Test
     public void shouldThrowWhenEmptyFlavourTextNotFound() {
-        String pokemon = "pokemon";
+
         when(pokemonRepository.getPokemonByName(pokemon))
                 .thenReturn(Pokemon.builder().id(1).name("pokemon")
                         .flavor_text_entries(Collections.singletonList(FlavourText.builder()
@@ -162,7 +160,7 @@ class PokemonClientTest {
 
     @Test
     public void shouldThrowWhenRestClientException() {
-        String pokemon = "pokemon";
+
         when(pokemonRepository.getPokemonByName(pokemon)).thenThrow(new TrueLayerRestClientException(new RestClientException("RestClientException")));
 
         assertThrows(TrueLayerRestClientException.class
