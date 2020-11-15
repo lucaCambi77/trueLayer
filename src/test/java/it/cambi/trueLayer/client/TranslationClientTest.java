@@ -1,6 +1,7 @@
 package it.cambi.trueLayer.client;
 
 import it.cambi.trueLayer.exception.DataNotFoundException;
+import it.cambi.trueLayer.exception.TrueLayerRestClientException;
 import it.cambi.trueLayer.model.translation.ShakespeareSuccess;
 import it.cambi.trueLayer.model.translation.ShakespeareTranslation;
 import it.cambi.trueLayer.model.translation.ShakespeareTranslationContent;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestClientException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -70,6 +72,19 @@ public class TranslationClientTest {
         assertThrows(DataNotFoundException.class
                 , () -> translationClient.getShakespeareTranslation(input)
                 , "Should throw DataNotFoundException translation not found");
+
+        verify(translationRepository).getShakespeareTranslationBy(input);
+    }
+
+
+    @Test
+    public void shouldThrowWhenRestClientException() {
+        String input = "input";
+        when(translationRepository.getShakespeareTranslationBy(input)).thenThrow(new TrueLayerRestClientException(new RestClientException("RestClientException")));
+
+        assertThrows(TrueLayerRestClientException.class
+                , () -> translationClient.getShakespeareTranslation(input)
+                , "Should throw TrueLayerRestClientException when rest client throws exception");
 
         verify(translationRepository).getShakespeareTranslationBy(input);
     }

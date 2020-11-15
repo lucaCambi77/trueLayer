@@ -2,6 +2,7 @@ package it.cambi.trueLayer.client;
 
 import it.cambi.trueLayer.constant.TrueLayerConstant;
 import it.cambi.trueLayer.exception.DataNotFoundException;
+import it.cambi.trueLayer.exception.TrueLayerRestClientException;
 import it.cambi.trueLayer.model.pokemon.FlavourText;
 import it.cambi.trueLayer.model.pokemon.FlavourTextVersion;
 import it.cambi.trueLayer.model.pokemon.Pokemon;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Collections;
 
@@ -55,6 +57,8 @@ class PokemonClientTest {
         FlavourText pokemonFlavourText = pokemonClient.getPokemonFlavorText(pokemon, null);
 
         assertEquals(flavourText, pokemonFlavourText.getFlavour_text());
+
+        verify(pokemonRepository).getPokemonVersion();
         verify(pokemonRepository).getPokemonByName(pokemon);
     }
 
@@ -79,26 +83,35 @@ class PokemonClientTest {
 
         assertEquals(flavourText, pokemonFlavourText.getFlavour_text());
         assertTrue(pokemonFlavourText.getVersion().getUrl().indexOf(differentVersion.toString()) > 0);
+
+        verify(pokemonRepository).getPokemonVersion();
         verify(pokemonRepository).getPokemonByName(pokemon);
     }
 
     @Test
-    public void shouldThrowWithInvalidVersion() {
-        Integer differentVersion = -1;
+    public void shouldThrowNegativeVersion() {
+        Integer negativeVersion = -1;
         String pokemon = "pokemon";
 
         assertThrows(IllegalArgumentException.class
-                , () -> pokemonClient.getPokemonFlavorText(pokemon, differentVersion)
+                , () -> pokemonClient.getPokemonFlavorText(pokemon, negativeVersion)
                 , "Should throw IllegalArgumentException when negative version");
 
+        verify(pokemonRepository).getPokemonVersion();
         verify(pokemonRepository, times(0)).getPokemonByName(anyString());
+    }
 
-        Integer differentVersion1 = pokemonVerCount + 1;
+    @Test
+    public void shouldThrowNotYesExistingVersion() {
+        String pokemon = "pokemon";
+
+        Integer notYetExistingVersion = pokemonVerCount + 1;
 
         assertThrows(IllegalArgumentException.class
-                , () -> pokemonClient.getPokemonFlavorText(pokemon, differentVersion1)
+                , () -> pokemonClient.getPokemonFlavorText(pokemon, notYetExistingVersion)
                 , "Should throw IllegalArgumentException when version greater than current");
 
+        verify(pokemonRepository).getPokemonVersion();
         verify(pokemonRepository, times(0)).getPokemonByName(anyString());
     }
 
@@ -113,6 +126,7 @@ class PokemonClientTest {
                 , () -> pokemonClient.getPokemonFlavorText(pokemon, null)
                 , "Should throw DataNotFoundException when missing FlavourText entries");
 
+        verify(pokemonRepository).getPokemonVersion();
         verify(pokemonRepository).getPokemonByName(pokemon);
     }
 
@@ -126,6 +140,7 @@ class PokemonClientTest {
                 , () -> pokemonClient.getPokemonFlavorText(pokemon, null)
                 , "Should throw DataNotFoundException when missing FlavourText entries");
 
+        verify(pokemonRepository).getPokemonVersion();
         verify(pokemonRepository).getPokemonByName(pokemon);
     }
 
@@ -141,6 +156,31 @@ class PokemonClientTest {
                 , () -> pokemonClient.getPokemonFlavorText(pokemon, null)
                 , "Should throw DataNotFoundException when FlavourText not found");
 
+        verify(pokemonRepository).getPokemonVersion();
         verify(pokemonRepository).getPokemonByName(pokemon);
+    }
+
+    @Test
+    public void shouldThrowWhenRestClientException() {
+        String pokemon = "pokemon";
+        when(pokemonRepository.getPokemonByName(pokemon)).thenThrow(new TrueLayerRestClientException(new RestClientException("RestClientException")));
+
+        assertThrows(TrueLayerRestClientException.class
+                , () -> pokemonClient.getPokemonFlavorText(pokemon, null)
+                , "Should throw TrueLayerRestClientException when rest client throws exception");
+
+        verify(pokemonRepository).getPokemonVersion();
+        verify(pokemonRepository).getPokemonByName(pokemon);
+
+        reset(pokemonRepository);
+
+        when(pokemonRepository.getPokemonVersion()).thenThrow(new TrueLayerRestClientException(new RestClientException("RestClientException")));
+
+        assertThrows(TrueLayerRestClientException.class
+                , () -> pokemonClient.getPokemonFlavorText(pokemon, null)
+                , "Should throw TrueLayerRestClientException when rest client throws exception");
+
+        verify(pokemonRepository).getPokemonVersion();
+        verify(pokemonRepository, times(0)).getPokemonByName(pokemon);
     }
 }
