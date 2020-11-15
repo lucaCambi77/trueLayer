@@ -2,11 +2,11 @@ package it.cambi.trueLayer.model.pokemon;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Getter
-@Setter
+@Jacksonized
 public class FlavourTextVersion {
     String name;
     String url;

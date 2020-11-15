@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TranslationClient {
 
-    private FunTranslationRepository funTranslationRepository;
+    private final FunTranslationRepository funTranslationRepository;
 
     public ShakespeareTranslation getShakespeareTranslation(String input) {
         ShakespeareTranslation shakespeareTranslation = funTranslationRepository.getShakespeareTranslationBy(input);

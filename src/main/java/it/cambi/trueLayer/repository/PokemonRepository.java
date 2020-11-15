@@ -4,18 +4,20 @@ import it.cambi.trueLayer.constant.TrueLayerConstant;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
 import it.cambi.trueLayer.model.pokemon.Pokemon;
 import it.cambi.trueLayer.model.pokemon.PokemonVersion;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+@Repository
+@RequiredArgsConstructor
 public class PokemonRepository {
+
+    private final RestTemplate restTemplate;
 
     @Value("${pokemon.client.endpoint}")
     private String pokemonClientEndpoint;
-
-    RestTemplate restTemplate;
 
     public Pokemon getPokemonByName(String name) {
         try {

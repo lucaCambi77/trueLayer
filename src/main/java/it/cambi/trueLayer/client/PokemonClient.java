@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PokemonClient {
 
-    private PokemonRepository pokemonRepository;
+    private final PokemonRepository pokemonRepository;
 
     public FlavourText getPokemonFlavorText(String name, Integer inputVersion) {
         PokemonVersion pokemonVersion = pokemonRepository.getPokemonVersion();

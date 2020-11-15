@@ -16,6 +16,7 @@ public class TrueLayerApplication {
 
     @Bean
     public RestTemplate getRestTemplate() {
+
         return new RestTemplate();
     }
 
