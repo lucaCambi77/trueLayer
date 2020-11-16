@@ -37,7 +37,7 @@ docker build -t truelayer/tranlsation .
 docker-compose up -d
 ```
 
-## Endpoints : 
+## Endpoints
 
 ```
 GET http://localhost:5000/pokemon/{name}?version=xxx
