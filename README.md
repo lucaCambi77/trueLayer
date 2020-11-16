@@ -40,7 +40,7 @@ docker-compose up -d
 ## Endpoints : 
 
 ```
-GET http://localhost:5000/pokemon/{name}&version=xxx
+GET http://localhost:5000/pokemon/{name}?version=xxx
 
 name -> name of the pokemon to search
 version -> optional parameter for a specific pokemon version, latest version otherwise
