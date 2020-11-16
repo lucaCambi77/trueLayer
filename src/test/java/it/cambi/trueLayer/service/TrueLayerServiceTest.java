@@ -35,22 +35,22 @@ public class TrueLayerServiceTest {
 
     private final String name = "pokemon";
     private final String flavourText = "flavourText";
+    private final String flavourTranslated = "flavour_translated";
+
+    private final FlavorText flavourTextResponse = FlavorText.builder()
+            .flavor_text(flavourText)
+            .language(FlavourTextVersion.builder()
+                    .name(TrueLayerConstant.DEFAULT_LANGUAGE)
+                    .url("languageUrl").build())
+            .version(FlavourTextVersion.builder()
+                    .name("versionName").url("versionUrl/" + 100)
+                    .build()).build();
 
     @Test
     public void shouldFindShakespeareTranslation() {
 
-        FlavorText flavourTextResponse = FlavorText.builder()
-                .flavor_text(flavourText)
-                .language(FlavourTextVersion.builder()
-                        .name(TrueLayerConstant.DEFAULT_LANGUAGE)
-                        .url("languageUrl").build())
-                .version(FlavourTextVersion.builder()
-                        .name("versionName").url("versionUrl/" + 100)
-                        .build()).build();
-
         when(pokemonClient.getPokemonFlavorText(name, null)).thenReturn(flavourTextResponse);
 
-        String flavourTranslated = "flavour_translated";
         when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavor_text())).thenReturn(ShakespeareTranslation.builder()
                 .success(ShakespeareSuccess.builder()
                         .total(1).build())
@@ -66,6 +66,29 @@ public class TrueLayerServiceTest {
         assertEquals(name, shakespeareTranslationDto.getName());
 
         verify(pokemonClient).getPokemonFlavorText(name, null);
+        verify(translationClient).getShakespeareTranslation(flavourText);
+    }
+
+    @Test
+    public void shouldFindShakespeareTranslationWithVersion() {
+
+        when(pokemonClient.getPokemonFlavorText(name, 100)).thenReturn(flavourTextResponse);
+
+        when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavor_text())).thenReturn(ShakespeareTranslation.builder()
+                .success(ShakespeareSuccess.builder()
+                        .total(1).build())
+                .contents(ShakespeareTranslationContent.builder()
+                        .translation("shakespeare")
+                        .translated(flavourTranslated)
+                        .text(flavourTextResponse.getFlavor_text()).build()).build());
+
+        ShakespeareTranslationDto shakespeareTranslationDto = trueLayerService.getShakespeareTranslationByPokemon(name, 100);
+
+        assertNotNull(shakespeareTranslationDto);
+        assertEquals(flavourTranslated, shakespeareTranslationDto.getDescription());
+        assertEquals(name, shakespeareTranslationDto.getName());
+
+        verify(pokemonClient).getPokemonFlavorText(name, 100);
         verify(translationClient).getShakespeareTranslation(flavourText);
     }
 
