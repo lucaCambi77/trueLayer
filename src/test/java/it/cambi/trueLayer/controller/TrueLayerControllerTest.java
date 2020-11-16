@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 
 import static org.hamcrest.Matchers.is;
@@ -70,13 +73,13 @@ public class TrueLayerControllerTest {
     }
 
     @Test
-    public void shouldGetInternalServerErrorWhenDataNotFoundException() throws Exception {
+    public void shouldNotFoundErrorWhenDataNotFoundException() throws Exception {
 
         when(trueLayerService.getShakespeareTranslationByPokemon(name, null))
                 .thenThrow(new DataNotFoundException("Data not found"));
 
         mockMvc.perform(get("/pokemon/" + name)
-                .contentType(mediaType)).andExpect(status().isInternalServerError())
+                .contentType(mediaType)).andExpect(status().isNotFound())
                 .andReturn();
         verify(trueLayerService).getShakespeareTranslationByPokemon(name, null);
     }
@@ -94,10 +97,36 @@ public class TrueLayerControllerTest {
     }
 
     @Test
+    public void shouldGetInternalServerErrorHttpServerException() throws Exception {
+
+        when(trueLayerService.getShakespeareTranslationByPokemon(name, null))
+                .thenThrow(new TrueLayerRestClientException(new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE)));
+
+        mockMvc.perform(get("/pokemon/" + name)
+                .contentType(mediaType)).andExpect(status().is5xxServerError())
+                .andReturn();
+        verify(trueLayerService).getShakespeareTranslationByPokemon(name, null);
+    }
+
+
+    @Test
+    public void shouldGetInternalClientErrorHttpServerException() throws Exception {
+
+        when(trueLayerService.getShakespeareTranslationByPokemon(name, null))
+                .thenThrow(new TrueLayerRestClientException(new HttpClientErrorException(HttpStatus.BAD_REQUEST)));
+
+        mockMvc.perform(get("/pokemon/" + name)
+                .contentType(mediaType)).andExpect(status().is4xxClientError())
+                .andReturn();
+        verify(trueLayerService).getShakespeareTranslationByPokemon(name, null);
+    }
+
+
+    @Test
     public void shouldGetInternalServerErrorRestClientException() throws Exception {
 
         when(trueLayerService.getShakespeareTranslationByPokemon(name, null))
-                .thenThrow(new TrueLayerRestClientException(new RestClientException("Rest client Exception")));
+                .thenThrow(new TrueLayerRestClientException(new RestClientException("Some rest client error")));
 
         mockMvc.perform(get("/pokemon/" + name)
                 .contentType(mediaType)).andExpect(status().isInternalServerError())

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Date;
 
@@ -15,9 +16,9 @@ import java.util.Date;
 public class TrueLayerControllerAdvice {
 
     @ExceptionHandler(DataNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> datNotFoundException(DataNotFoundException dataNotFoundException) {
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .error(httpStatus.getReasonPhrase())
@@ -45,13 +46,22 @@ public class TrueLayerControllerAdvice {
     }
 
     @ExceptionHandler(TrueLayerRestClientException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorResponse> restClientServerException(TrueLayerRestClientException trueLayerRestClientException) {
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    public ResponseEntity<ErrorResponse> restClientServerException(TrueLayerRestClientException restClientException) {
+        HttpStatus httpStatus;
+
+        if (restClientException.getCause() instanceof HttpClientErrorException) {
+            HttpClientErrorException httpClientErrorException = (HttpClientErrorException) restClientException.getCause();
+            httpStatus = httpClientErrorException.getStatusCode();
+        } else if (restClientException.getCause() instanceof HttpClientErrorException) {
+            HttpClientErrorException httpClientServerException = (HttpClientErrorException) restClientException.getCause();
+            httpStatus = httpClientServerException.getStatusCode();
+        } else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .error(httpStatus.getReasonPhrase())
-                .errorMessage(trueLayerRestClientException.getMessage())
+                .errorMessage(restClientException.getMessage())
                 .status(httpStatus.value())
                 .timmeStamp(new Date())
                 .build();
