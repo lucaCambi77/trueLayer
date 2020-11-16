@@ -46,4 +46,13 @@ name -> name of the pokemon to search
 version -> optional parameter for a specific pokemon version, latest version otherwise
 ```
 
+## Gradle Tasks
 
+```
+
+./gradlew test              // runs only tests
+./gradlew build             // build project
+./gradlew build -x test     // build project and skip tests
+./gradlew clean build       // unvalidate cache and build
+
+```
