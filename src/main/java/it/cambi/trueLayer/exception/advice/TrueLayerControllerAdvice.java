@@ -48,20 +48,23 @@ public class TrueLayerControllerAdvice {
     @ExceptionHandler(TrueLayerRestClientException.class)
     public ResponseEntity<ErrorResponse> restClientServerException(TrueLayerRestClientException restClientException) {
         HttpStatus httpStatus;
-
+        String exceptionMessage;
         if (restClientException.getCause() instanceof HttpClientErrorException) {
             HttpClientErrorException httpClientErrorException = (HttpClientErrorException) restClientException.getCause();
             httpStatus = httpClientErrorException.getStatusCode();
+            exceptionMessage = httpClientErrorException.getMessage();
         } else if (restClientException.getCause() instanceof HttpClientErrorException) {
             HttpClientErrorException httpClientServerException = (HttpClientErrorException) restClientException.getCause();
             httpStatus = httpClientServerException.getStatusCode();
+            exceptionMessage = httpClientServerException.getMessage();
         } else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            exceptionMessage = restClientException.getMessage();
         }
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .error(httpStatus.getReasonPhrase())
-                .errorMessage(restClientException.getMessage())
+                .errorMessage(exceptionMessage)
                 .status(httpStatus.value())
                 .timmeStamp(new Date())
                 .build();
