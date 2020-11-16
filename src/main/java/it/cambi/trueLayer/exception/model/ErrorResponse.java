@@ -1,4 +1,4 @@
-package it.cambi.trueLayer.exception;
+package it.cambi.trueLayer.exception.model;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -22,6 +22,7 @@ public class TrueLayerApplication {
 
     @Bean
     public ObjectMapper getObjectMapper() {
+
         return new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 }

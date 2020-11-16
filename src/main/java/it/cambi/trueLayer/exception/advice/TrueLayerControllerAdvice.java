@@ -1,8 +1,8 @@
 package it.cambi.trueLayer.exception.advice;
 
 import it.cambi.trueLayer.exception.DataNotFoundException;
-import it.cambi.trueLayer.exception.ErrorResponse;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
+import it.cambi.trueLayer.exception.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

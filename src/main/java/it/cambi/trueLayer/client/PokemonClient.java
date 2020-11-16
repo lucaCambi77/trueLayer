@@ -20,10 +20,9 @@ public class PokemonClient {
     public FlavourText getPokemonFlavorText(String name, Integer inputVersion) {
         PokemonVersion pokemonVersion = pokemonRepository.getPokemonVersion();
 
-        int version = Optional.ofNullable(inputVersion).orElseGet(pokemonVersion::getCount);
-
-        if (version < 1 || version > pokemonVersion.getCount())
-            throw new IllegalArgumentException("Version must be greater than zero and less or equal to " + pokemonVersion.getCount());
+        int version = Optional.of(Optional.ofNullable(inputVersion).orElseGet(pokemonVersion::getCount))
+                .filter(v -> v < 1 || v > pokemonVersion.getCount())
+                .orElseThrow(() -> new IllegalArgumentException("Version must be greater than zero and less or equal to " + pokemonVersion.getCount()));
 
         Pokemon pokemon = pokemonRepository.getPokemonByName(name);
         Optional<Pokemon> optPokemon = Optional.ofNullable(pokemon).filter(p -> p.getId() != null).filter(p -> p.getFlavor_text_entries() != null);
