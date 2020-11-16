@@ -21,7 +21,7 @@ public class PokemonClient {
         PokemonVersion pokemonVersion = pokemonRepository.getPokemonVersion();
 
         int version = Optional.of(Optional.ofNullable(inputVersion).orElseGet(pokemonVersion::getCount))
-                .filter(v -> v < 1 || v > pokemonVersion.getCount())
+                .filter(v -> !(v < 1 || v > pokemonVersion.getCount()))
                 .orElseThrow(() -> new IllegalArgumentException("Version must be greater than zero and less or equal to " + pokemonVersion.getCount()));
 
         Pokemon pokemon = pokemonRepository.getPokemonByName(name);
