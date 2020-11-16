@@ -15,9 +15,12 @@ public class TranslationClient {
     private final FunTranslationRepository funTranslationRepository;
 
     public ShakespeareTranslation getShakespeareTranslation(String input) {
-        ShakespeareTranslation shakespeareTranslation = funTranslationRepository.getShakespeareTranslationBy(input);
+        ShakespeareTranslation shakespeareTranslation = Optional.ofNullable(input)
+                .filter(i -> !i.isBlank())
+                .map(funTranslationRepository::getShakespeareTranslationBy)
+                .orElseThrow(() -> new DataNotFoundException("Unable to translate empty or null input"));
 
-       return Optional.ofNullable(shakespeareTranslation).filter(st -> st.getSuccess().getTotal() > 0)
-               .orElseThrow(() -> new DataNotFoundException("Unable to translate input " + input));
+        return Optional.ofNullable(shakespeareTranslation).filter(st -> st.getSuccess().getTotal() > 0)
+                .orElseThrow(() -> new DataNotFoundException("Unable to translate input " + input));
     }
 }

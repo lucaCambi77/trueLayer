@@ -15,8 +15,7 @@ import org.springframework.web.client.RestClientException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TranslationClientTest {
@@ -47,6 +46,22 @@ public class TranslationClientTest {
         assertEquals(translatedInput, shakespeareTranslation.getContents().getTranslated());
         assertEquals(1, shakespeareTranslation.getSuccess().getTotal());
         verify(translationRepository).getShakespeareTranslationBy(input);
+    }
+
+    @Test
+    public void shouldThrowWhenNullInput() {
+
+        assertThrows(DataNotFoundException.class
+                , () -> translationClient.getShakespeareTranslation(null)
+                , "Should throw DataNotFoundException translation null input");
+
+        verify(translationRepository, times(0)).getShakespeareTranslationBy(anyString());
+
+        assertThrows(DataNotFoundException.class
+                , () -> translationClient.getShakespeareTranslation("   ")
+                , "Should throw DataNotFoundException translation empty input");
+
+        verify(translationRepository, times(0)).getShakespeareTranslationBy(anyString());
     }
 
     @Test
