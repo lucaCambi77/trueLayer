@@ -6,7 +6,7 @@ import it.cambi.trueLayer.constant.TrueLayerConstant;
 import it.cambi.trueLayer.dto.ShakespeareTranslationDto;
 import it.cambi.trueLayer.exception.DataNotFoundException;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
-import it.cambi.trueLayer.model.pokemon.FlavourText;
+import it.cambi.trueLayer.model.pokemon.FlavorText;
 import it.cambi.trueLayer.model.pokemon.FlavourTextVersion;
 import it.cambi.trueLayer.model.translation.ShakespeareSuccess;
 import it.cambi.trueLayer.model.translation.ShakespeareTranslation;
@@ -39,8 +39,8 @@ public class TrueLayerServiceTest {
     @Test
     public void shouldFindShakespeareTranslation() {
 
-        FlavourText flavourTextResponse = FlavourText.builder()
-                .flavour_text(flavourText)
+        FlavorText flavourTextResponse = FlavorText.builder()
+                .flavor_text(flavourText)
                 .language(FlavourTextVersion.builder()
                         .name(TrueLayerConstant.DEFAULT_LANGUAGE)
                         .url("languageUrl").build())
@@ -51,13 +51,13 @@ public class TrueLayerServiceTest {
         when(pokemonClient.getPokemonFlavorText(name, null)).thenReturn(flavourTextResponse);
 
         String flavourTranslated = "flavour_translated";
-        when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavour_text())).thenReturn(ShakespeareTranslation.builder()
+        when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavor_text())).thenReturn(ShakespeareTranslation.builder()
                 .success(ShakespeareSuccess.builder()
                         .total(1).build())
                 .contents(ShakespeareTranslationContent.builder()
                         .translation("shakespeare")
                         .translated(flavourTranslated)
-                        .text(flavourTextResponse.getFlavour_text()).build()).build());
+                        .text(flavourTextResponse.getFlavor_text()).build()).build());
 
         ShakespeareTranslationDto shakespeareTranslationDto = trueLayerService.getShakespeareTranslationByPokemon(name, null);
 
@@ -98,8 +98,8 @@ public class TrueLayerServiceTest {
     @Test
     public void shouldThrowWhenTranslationClientRestClientException() {
 
-        FlavourText flavourTextResponse = FlavourText.builder()
-                .flavour_text(flavourText)
+        FlavorText flavourTextResponse = FlavorText.builder()
+                .flavor_text(flavourText)
                 .language(FlavourTextVersion.builder()
                         .name(TrueLayerConstant.DEFAULT_LANGUAGE)
                         .url("languageUrl").build())

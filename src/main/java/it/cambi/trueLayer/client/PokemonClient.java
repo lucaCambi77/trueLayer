@@ -2,7 +2,7 @@ package it.cambi.trueLayer.client;
 
 import it.cambi.trueLayer.constant.TrueLayerConstant;
 import it.cambi.trueLayer.exception.DataNotFoundException;
-import it.cambi.trueLayer.model.pokemon.FlavourText;
+import it.cambi.trueLayer.model.pokemon.FlavorText;
 import it.cambi.trueLayer.model.pokemon.Pokemon;
 import it.cambi.trueLayer.model.pokemon.PokemonVersion;
 import it.cambi.trueLayer.repository.PokemonRepository;
@@ -17,7 +17,7 @@ public class PokemonClient {
 
     private final PokemonRepository pokemonRepository;
 
-    public FlavourText getPokemonFlavorText(String name, Integer inputVersion) {
+    public FlavorText getPokemonFlavorText(String name, Integer inputVersion) {
         PokemonVersion pokemonVersion = pokemonRepository.getPokemonVersion();
 
         int version = Optional.of(Optional.ofNullable(inputVersion).orElseGet(pokemonVersion::getCount))

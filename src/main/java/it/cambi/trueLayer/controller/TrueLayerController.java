@@ -14,7 +14,7 @@ public class TrueLayerController {
     private final TrueLayerService trueLayerService;
 
     @RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ShakespeareTranslationDto getShakespeareDescriptionByPokemon(@PathVariable String name, @RequestParam(required = false) Integer version) {
+    public ShakespeareTranslationDto getShakespeareDescriptionByPokemon(@PathVariable String name, @RequestParam(required = false, value = "version") Integer version) {
         return trueLayerService.getShakespeareTranslationByPokemon(name, version);
     }
 }

@@ -7,9 +7,9 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Getter
 @Jacksonized
-public class FlavourText {
+public class FlavorText {
 
-    String flavour_text;
+    String flavor_text;
     FlavourTextVersion language;
     FlavourTextVersion version;
 }

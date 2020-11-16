@@ -3,7 +3,7 @@ package it.cambi.trueLayer.client;
 import it.cambi.trueLayer.constant.TrueLayerConstant;
 import it.cambi.trueLayer.exception.DataNotFoundException;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
-import it.cambi.trueLayer.model.pokemon.FlavourText;
+import it.cambi.trueLayer.model.pokemon.FlavorText;
 import it.cambi.trueLayer.model.pokemon.FlavourTextVersion;
 import it.cambi.trueLayer.model.pokemon.Pokemon;
 import it.cambi.trueLayer.model.pokemon.PokemonVersion;
@@ -45,8 +45,8 @@ class PokemonClientTest {
 
         when(pokemonRepository.getPokemonByName(pokemon))
                 .thenReturn(Pokemon.builder().id(1).name("pokemon")
-                        .flavor_text_entries(Collections.singletonList(FlavourText.builder()
-                                .flavour_text(flavourText)
+                        .flavor_text_entries(Collections.singletonList(FlavorText.builder()
+                                .flavor_text(flavourText)
                                 .language(FlavourTextVersion.builder()
                                         .name(TrueLayerConstant.DEFAULT_LANGUAGE)
                                         .url("languageUrl").build())
@@ -55,9 +55,9 @@ class PokemonClientTest {
                                         .build()).build()))
                         .build());
 
-        FlavourText pokemonFlavourText = pokemonClient.getPokemonFlavorText(pokemon, null);
+        FlavorText pokemonFlavourText = pokemonClient.getPokemonFlavorText(pokemon, null);
 
-        assertEquals(flavourText, pokemonFlavourText.getFlavour_text());
+        assertEquals(flavourText, pokemonFlavourText.getFlavor_text());
 
         verify(pokemonRepository).getPokemonVersion();
         verify(pokemonRepository).getPokemonByName(pokemon);
@@ -69,8 +69,8 @@ class PokemonClientTest {
 
         when(pokemonRepository.getPokemonByName(pokemon))
                 .thenReturn(Pokemon.builder().id(1).name("pokemon")
-                        .flavor_text_entries(Collections.singletonList(FlavourText.builder()
-                                .flavour_text(flavourText)
+                        .flavor_text_entries(Collections.singletonList(FlavorText.builder()
+                                .flavor_text(flavourText)
                                 .language(FlavourTextVersion.builder()
                                         .name(TrueLayerConstant.DEFAULT_LANGUAGE)
                                         .url("languageUrl").build())
@@ -79,9 +79,9 @@ class PokemonClientTest {
                                         .build()).build()))
                         .build());
 
-        FlavourText pokemonFlavourText = pokemonClient.getPokemonFlavorText(pokemon, differentVersion);
+        FlavorText pokemonFlavourText = pokemonClient.getPokemonFlavorText(pokemon, differentVersion);
 
-        assertEquals(flavourText, pokemonFlavourText.getFlavour_text());
+        assertEquals(flavourText, pokemonFlavourText.getFlavor_text());
         assertTrue(pokemonFlavourText.getVersion().getUrl().indexOf(differentVersion.toString()) > 0);
 
         verify(pokemonRepository).getPokemonVersion();
@@ -147,7 +147,7 @@ class PokemonClientTest {
 
         when(pokemonRepository.getPokemonByName(pokemon))
                 .thenReturn(Pokemon.builder().id(1).name("pokemon")
-                        .flavor_text_entries(Collections.singletonList(FlavourText.builder()
+                        .flavor_text_entries(Collections.singletonList(FlavorText.builder()
                                 .build())).build());
 
         assertThrows(DataNotFoundException.class

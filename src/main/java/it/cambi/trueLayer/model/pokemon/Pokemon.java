@@ -13,6 +13,6 @@ public class Pokemon {
 
     Integer id;
     String name;
-    List<FlavourText> flavor_text_entries;
+    List<FlavorText> flavor_text_entries;
 
 }
