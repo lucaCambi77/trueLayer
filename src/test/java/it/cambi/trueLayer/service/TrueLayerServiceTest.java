@@ -51,7 +51,8 @@ public class TrueLayerServiceTest {
 
         when(pokemonClient.getPokemonFlavorText(name, null)).thenReturn(flavourTextResponse);
 
-        when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavor_text())).thenReturn(ShakespeareTranslation.builder()
+        when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavor_text())).thenReturn(
+                ShakespeareTranslation.builder()
                 .success(ShakespeareSuccess.builder()
                         .total(1).build())
                 .contents(ShakespeareTranslationContent.builder()
@@ -74,7 +75,8 @@ public class TrueLayerServiceTest {
 
         when(pokemonClient.getPokemonFlavorText(name, 100)).thenReturn(flavourTextResponse);
 
-        when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavor_text())).thenReturn(ShakespeareTranslation.builder()
+        when(translationClient.getShakespeareTranslation(flavourTextResponse.getFlavor_text())).thenReturn(
+                ShakespeareTranslation.builder()
                 .success(ShakespeareSuccess.builder()
                         .total(1).build())
                 .contents(ShakespeareTranslationContent.builder()
