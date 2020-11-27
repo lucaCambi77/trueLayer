@@ -32,14 +32,14 @@ public class CacheConfig {
   private Duration pokemonNameCache;
 
   @Bean
-  public RedisTemplate<?, ?> redisTemplate(RedisProperties redisProperties) {
+  public RedisTemplate<?, ?> getRedisTemplate(RedisProperties redisProperties) {
     RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
-    template.setConnectionFactory(redisConnectionFactory(redisProperties));
+    template.setConnectionFactory(getRedisConnectionFactory(redisProperties));
     return template;
   }
 
   @Bean
-  public LettuceConnectionFactory redisConnectionFactory(RedisProperties redisProperties) {
+  public LettuceConnectionFactory getRedisConnectionFactory(RedisProperties redisProperties) {
     RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 
     redisStandaloneConfiguration.setHostName(redisProperties.getRedisHost());
@@ -50,22 +50,22 @@ public class CacheConfig {
   }
 
   @Bean
-  public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+  public CacheManager getCacheManager(RedisConnectionFactory redisConnectionFactory) {
     return RedisCacheManager.builder(redisConnectionFactory)
-        .withInitialCacheConfigurations(cacheExpiries())
+        .withInitialCacheConfigurations(getCacheExpiresMap())
         .build();
   }
 
-  private Map<String, RedisCacheConfiguration> cacheExpiries() {
+  private Map<String, RedisCacheConfiguration> getCacheExpiresMap() {
     Map<String, RedisCacheConfiguration> result = new HashMap<>();
 
-    result.put("pokemonVersionCache", ttlCacheConfiguration(pokemonVersionCache));
-    result.put("pokemonNameCache", ttlCacheConfiguration(pokemonNameCache));
+    result.put("pokemonVersionCache", getTtlCacheConfiguration(pokemonVersionCache));
+    result.put("pokemonNameCache", getTtlCacheConfiguration(pokemonNameCache));
 
     return result;
   }
 
-  private RedisCacheConfiguration ttlCacheConfiguration(Duration ttl) {
+  private RedisCacheConfiguration getTtlCacheConfiguration(Duration ttl) {
     return RedisCacheConfiguration.defaultCacheConfig()
         .serializeKeysWith(
             RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()))
