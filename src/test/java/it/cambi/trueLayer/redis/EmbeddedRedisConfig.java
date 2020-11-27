@@ -1,7 +1,10 @@
 package it.cambi.trueLayer.redis;
 
-import it.cambi.trueLayer.config.RedisProperties;
+import it.cambi.trueLayer.model.RedisProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import redis.embedded.RedisServer;
 
 import javax.annotation.PostConstruct;
@@ -11,19 +14,22 @@ import java.io.IOException;
 @TestConfiguration
 public class EmbeddedRedisConfig {
 
-  private RedisServer redisServer;
+    @Autowired
+    private RedisProperties redisProperties;
 
-  public EmbeddedRedisConfig(RedisProperties redisProperties) throws IOException {
-    this.redisServer = new RedisServer(redisProperties.getRedisPort());
-  }
+    @PostConstruct
+    public void postConstruct() throws IOException {
+        getRedisServer().start();
+    }
 
-  @PostConstruct
-  public void postConstruct() {
-    redisServer.start();
-  }
+    @PreDestroy
+    public void preDestroy() throws IOException {
+        getRedisServer().stop();
+    }
 
-  @PreDestroy
-  public void preDestroy() {
-    redisServer.stop();
-  }
+    @Bean
+    @DependsOn(value = "RedisProperties")
+    public RedisServer getRedisServer() throws IOException {
+        return new RedisServer(redisProperties.getRedisPort());
+    }
 }
