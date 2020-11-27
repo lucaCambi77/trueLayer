@@ -3,7 +3,7 @@ package it.cambi.trueLayer.controller;
 import it.cambi.trueLayer.dto.ShakespeareTranslationDto;
 import it.cambi.trueLayer.exception.DataNotFoundException;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
-import it.cambi.trueLayer.redis.EmbeddedRedis;
+import it.cambi.trueLayer.redis.EmbeddedRedisConfig;
 import it.cambi.trueLayer.service.TrueLayerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(
-        classes = EmbeddedRedis.class,
+        classes = EmbeddedRedisConfig.class,
         properties = {"spring.redis.embedded=true"})@AutoConfigureMockMvc
 public class TrueLayerControllerTest {
 

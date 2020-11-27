@@ -2,7 +2,7 @@ package it.cambi.trueLayer.cache;
 
 import it.cambi.trueLayer.model.pokemon.Pokemon;
 import it.cambi.trueLayer.model.pokemon.PokemonVersion;
-import it.cambi.trueLayer.redis.EmbeddedRedis;
+import it.cambi.trueLayer.redis.EmbeddedRedisConfig;
 import it.cambi.trueLayer.repository.PokemonRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(
-    classes = EmbeddedRedis.class,
+    classes = EmbeddedRedisConfig.class,
     properties = {"spring.redis.embedded=true"})
 public class PokemonCacheTest {
 

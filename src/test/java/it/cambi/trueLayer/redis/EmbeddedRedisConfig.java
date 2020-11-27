@@ -9,11 +9,11 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 
 @TestConfiguration
-public class EmbeddedRedis {
+public class EmbeddedRedisConfig {
 
   private RedisServer redisServer;
 
-  public EmbeddedRedis(RedisProperties redisProperties) throws IOException {
+  public EmbeddedRedisConfig(RedisProperties redisProperties) throws IOException {
     this.redisServer = new RedisServer(redisProperties.getRedisPort());
   }
 
