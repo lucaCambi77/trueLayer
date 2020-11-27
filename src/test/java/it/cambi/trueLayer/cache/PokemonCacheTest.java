@@ -9,10 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -125,7 +126,8 @@ public class PokemonCacheTest {
 
     private void invalidateCache() {
         cacheManager.getCacheNames()
-                .parallelStream()
-                .forEach(n -> Objects.requireNonNull(cacheManager.getCache(n)).clear());
+                .stream()
+                .map(n -> Optional.ofNullable(cacheManager.getCache(n)))
+                .forEach(c -> c.ifPresent(Cache::clear));
     }
 }
