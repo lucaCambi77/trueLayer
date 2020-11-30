@@ -7,6 +7,6 @@ import lombok.Value;
 @Value
 public class ShakespeareTranslationDto {
 
-    String name;
-    String description;
+  String name;
+  String description;
 }

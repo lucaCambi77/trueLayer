@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TrueLayerController {
 
-    private final TrueLayerService trueLayerService;
+  private final TrueLayerService trueLayerService;
 
-    @RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ShakespeareTranslationDto getShakespeareDescriptionByPokemon(@PathVariable String name, @RequestParam(required = false, value = "version") Integer version) {
-        return trueLayerService.getShakespeareTranslationByPokemon(name, version);
-    }
+  @GetMapping(
+      value = "/{name}",
+      produces = {MediaType.APPLICATION_JSON_VALUE})
+  public ShakespeareTranslationDto getShakespeareDescriptionByPokemon(
+      @PathVariable String name,
+      @RequestParam(required = false, value = "version") Integer version) {
+    return trueLayerService.getShakespeareTranslationByPokemon(name, version);
+  }
 }

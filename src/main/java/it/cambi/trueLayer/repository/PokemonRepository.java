@@ -13,21 +13,26 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class PokemonRepository extends AbstractRepository {
 
-    private final RestTemplate restTemplate;
+  private final RestTemplate restTemplate;
 
-    @Value("${pokemon.client.endpoint}")
-    private String pokemonClientEndpoint;
+  @Value("${pokemon.client.endpoint}")
+  private String pokemonClientEndpoint;
 
-    @Cacheable(value = "pokemonNameCache", sync = true)
-    public Pokemon getPokemonByName(String name) {
+  public Pokemon getPokemonByName(String name) {
 
-        return getForObject(() -> restTemplate.getForObject(pokemonClientEndpoint + TrueLayerConstant.POKEMON_SPECIES_PATH + name, Pokemon.class));
-    }
+    return getForObject(
+        () ->
+            restTemplate.getForObject(
+                pokemonClientEndpoint + TrueLayerConstant.POKEMON_SPECIES_PATH + name,
+                Pokemon.class));
+  }
 
-    @Cacheable(value = "pokemonVersionCache", sync = true)
-    public PokemonVersion getPokemonVersion() {
+  public PokemonVersion getPokemonVersion() {
 
-        return getForObject(() -> restTemplate.getForObject(pokemonClientEndpoint + TrueLayerConstant.POKEMON_VERSION_PATH, PokemonVersion.class));
-    }
-
+    return getForObject(
+        () ->
+            restTemplate.getForObject(
+                pokemonClientEndpoint + TrueLayerConstant.POKEMON_VERSION_PATH,
+                PokemonVersion.class));
+  }
 }
