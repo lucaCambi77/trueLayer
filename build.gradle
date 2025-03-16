@@ -33,7 +33,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.github.kstyrc:embedded-redis:0.6'
+    testImplementation 'com.github.codemonstur:embedded-redis:1.4.3'
 }
 
 test {
