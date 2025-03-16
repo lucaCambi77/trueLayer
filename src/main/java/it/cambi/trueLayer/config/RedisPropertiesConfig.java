@@ -1,10 +1,11 @@
 package it.cambi.trueLayer.config;
 
 import it.cambi.trueLayer.model.RedisProperties;
+import java.io.IOException;
+import java.net.ServerSocket;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.SocketUtils;
 
 @Configuration
 public class RedisPropertiesConfig {
@@ -26,7 +27,16 @@ public class RedisPropertiesConfig {
     return RedisProperties.builder()
         .redisHost(redisEmbedded ? "localhost" : redisHost)
         .redisPassword(redisPassword)
-        .redisPort(redisEmbedded ? SocketUtils.findAvailableTcpPort() : redisPort)
+        .redisPort(redisEmbedded ? findAvailablePort() : redisPort)
         .build();
+  }
+
+  private int findAvailablePort() {
+    try (ServerSocket socket = new ServerSocket(0)) {
+      socket.setReuseAddress(true);
+      return socket.getLocalPort();
+    } catch (IOException e) {
+      throw new IllegalStateException("Could not find an available port", e);
+    }
   }
 }

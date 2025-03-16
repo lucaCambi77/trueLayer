@@ -6,11 +6,10 @@ import it.cambi.trueLayer.model.pokemon.FlavorText;
 import it.cambi.trueLayer.model.pokemon.Pokemon;
 import it.cambi.trueLayer.model.pokemon.PokemonVersion;
 import it.cambi.trueLayer.repository.PokemonRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

@@ -3,15 +3,15 @@ package it.cambi.trueLayer.exception.advice;
 import it.cambi.trueLayer.exception.DataNotFoundException;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
 import it.cambi.trueLayer.exception.model.ErrorResponse;
+import java.util.Date;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-
-import java.util.Date;
 
 @ControllerAdvice
 public class TrueLayerControllerAdvice {
@@ -53,18 +53,17 @@ public class TrueLayerControllerAdvice {
   @ExceptionHandler(TrueLayerRestClientException.class)
   public ResponseEntity<ErrorResponse> restClientServerException(
       TrueLayerRestClientException restClientException) {
-    HttpStatus httpStatus;
+    HttpStatusCode httpStatus;
     String exceptionMessage;
-    if (restClientException.getCause() instanceof HttpServerErrorException) {
-      HttpServerErrorException httpClientErrorException =
-          (HttpServerErrorException) restClientException.getCause();
-      httpStatus = httpClientErrorException.getStatusCode();
-      exceptionMessage = httpClientErrorException.getMessage();
-    } else if (restClientException.getCause() instanceof HttpClientErrorException) {
-      HttpClientErrorException httpClientServerException =
-          (HttpClientErrorException) restClientException.getCause();
-      httpStatus = httpClientServerException.getStatusCode();
-      exceptionMessage = httpClientServerException.getMessage();
+
+    Throwable cause = restClientException.getCause();
+
+    if (cause instanceof HttpServerErrorException ex) {
+      httpStatus = ex.getStatusCode();
+      exceptionMessage = ex.getMessage();
+    } else if (cause instanceof HttpClientErrorException ex) {
+      httpStatus = ex.getStatusCode();
+      exceptionMessage = ex.getMessage();
     } else {
       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
       exceptionMessage = restClientException.getMessage();
@@ -72,7 +71,6 @@ public class TrueLayerControllerAdvice {
 
     ErrorResponse errorResponse =
         ErrorResponse.builder()
-            .error(httpStatus.getReasonPhrase())
             .errorMessage(exceptionMessage)
             .status(httpStatus.value())
             .timmeStamp(new Date())

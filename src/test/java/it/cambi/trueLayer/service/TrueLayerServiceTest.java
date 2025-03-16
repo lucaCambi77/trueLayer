@@ -1,5 +1,8 @@
 package it.cambi.trueLayer.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import it.cambi.trueLayer.client.PokemonClient;
 import it.cambi.trueLayer.client.TranslationClient;
 import it.cambi.trueLayer.constant.TrueLayerConstant;
@@ -17,9 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClientException;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TrueLayerServiceTest {

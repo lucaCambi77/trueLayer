@@ -1,5 +1,9 @@
 package it.cambi.trueLayer.client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+
 import it.cambi.trueLayer.exception.DataNotFoundException;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
 import it.cambi.trueLayer.model.translation.ShakespeareSuccess;
@@ -12,10 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClientException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TranslationClientTest {

@@ -1,5 +1,8 @@
 package it.cambi.trueLayer.client;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import it.cambi.trueLayer.constant.TrueLayerConstant;
 import it.cambi.trueLayer.exception.DataNotFoundException;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
@@ -8,6 +11,7 @@ import it.cambi.trueLayer.model.pokemon.FlavourTextVersion;
 import it.cambi.trueLayer.model.pokemon.Pokemon;
 import it.cambi.trueLayer.model.pokemon.PokemonVersion;
 import it.cambi.trueLayer.repository.PokemonRepository;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,11 +20,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClientException;
-
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PokemonClientTest {

@@ -3,11 +3,10 @@ package it.cambi.trueLayer.client;
 import it.cambi.trueLayer.exception.DataNotFoundException;
 import it.cambi.trueLayer.model.translation.ShakespeareTranslation;
 import it.cambi.trueLayer.repository.FunTranslationRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

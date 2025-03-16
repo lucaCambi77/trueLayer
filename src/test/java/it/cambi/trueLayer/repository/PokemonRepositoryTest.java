@@ -1,18 +1,16 @@
 package it.cambi.trueLayer.repository;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import it.cambi.trueLayer.constant.TrueLayerConstant;
 import it.cambi.trueLayer.exception.TrueLayerRestClientException;
 import it.cambi.trueLayer.model.pokemon.Pokemon;
 import it.cambi.trueLayer.model.pokemon.PokemonVersion;
-import it.cambi.trueLayer.redis.EmbeddedRedisConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest(
-    classes = EmbeddedRedisConfig.class,
     properties = {"spring.redis.embedded=true"})
 public class PokemonRepositoryTest {
 
